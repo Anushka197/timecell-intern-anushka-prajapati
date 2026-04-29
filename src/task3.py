@@ -4,12 +4,18 @@ from typing import Dict, Any
 from google import genai
 from google.genai import types
 from google.genai import errors
+from openai import OpenAI
 from dotenv import load_dotenv
 import time
 
 load_dotenv()
 
-client = genai.Client()
+# Initialize both clients
+gemini_client = genai.Client()
+openai_client = OpenAI(
+  base_url="https://openrouter.ai/api/v1",
+  api_key=os.environ.get("OPENROUTER_API_KEY"),
+)
 
 def build_advisor_prompt(portfolio: Dict[str, Any], tone: str) -> str:
     """
@@ -50,16 +56,16 @@ You must respond with ONLY a valid JSON object matching this exact structure:
     return prompt
 
 def generate_portfolio_explanation(portfolio: Dict[str, Any], tone: str = "beginner") -> Dict[str, Any]:
-    """Calls the LLM to generate the initial explanation and parses the JSON."""
+    """Calls the Gemini API to generate the initial explanation and parses the JSON."""
     
     prompt = build_advisor_prompt(portfolio, tone)
     
-    print(f"\n[{tone.upper()} TONE] Sending request to Gemini API...")
+    print(f"\n[{tone.upper()} TONE] Sending request to Gemini API (Junior Advisor)...")
     
     max_retries = 3
     for attempt in range(max_retries):
         try:
-            response = client.models.generate_content(
+            response = gemini_client.models.generate_content(
                 model='gemini-2.5-flash',
                 contents=prompt,
                 config=types.GenerateContentConfig(
@@ -68,7 +74,7 @@ def generate_portfolio_explanation(portfolio: Dict[str, Any], tone: str = "begin
                 ),
             )
             raw_text = response.text
-            break # Exit the loop if successful
+            break
 
         except errors.ServerError as e:
             if "503" in str(e) and attempt < max_retries - 1:
@@ -81,13 +87,11 @@ def generate_portfolio_explanation(portfolio: Dict[str, Any], tone: str = "begin
              print(f"\n[ERROR] An unexpected error occurred: {e}")
              return {}
     
-    # Print the RAW output as required by the assignment
     print("\n" + "="*50)
-    print("RAW API RESPONSE:")
+    print("RAW GEMINI API RESPONSE:")
     print("="*50)
     print(raw_text)
     
-    # Parse the structured output
     try:
         parsed_output = json.loads(raw_text)
         return parsed_output
@@ -96,7 +100,7 @@ def generate_portfolio_explanation(portfolio: Dict[str, Any], tone: str = "begin
         return {}
 
 def critique_explanation(original_explanation: Dict[str, Any], portfolio: Dict[str, Any]) -> str:
-    """Bonus: A second LLM call to act as a senior partner critiquing the advisor's advice."""
+    """Uses OpenAI (GPT-4o-mini) to act as a senior partner critiquing the advisor's advice."""
     
     prompt = f"""You are a Senior Risk Officer at an elite wealth management firm.
 Review the following portfolio and the advice given by a junior advisor. 
@@ -113,17 +117,21 @@ Provide a brief, 2-sentence critique. Is the 'verdict' accurate? Is the advice t
 Respond in plain text, speaking directly to the junior advisor.
 """
 
-    print("\n[CRITIQUE] Requesting Senior Officer critique...")
-    response = client.models.generate_content(
-        model='gemini-2.5-flash',
-        contents=prompt,
-        config=types.GenerateContentConfig(temperature=0.3) # Lower temp for a stricter, more analytical critique
-    )
+    print("\n[CRITIQUE] Requesting Senior Officer critique from OpenAI (GPT-4o-mini)...")
     
-    return response.text
+    try:
+        response = openai_client.chat.completions.create(
+            model="openai/gpt-4o-mini",
+            messages=[
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.3 # Lower temp for a stricter, more analytical critique
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        return f"[ERROR] Failed to get critique from OpenAI: {e}"
 
 def main():
-    # Sample portfolio from Task 1
     sample_portfolio = {
         "total_value_inr": 10_000_000, 
         "monthly_expenses_inr": 80_000,
@@ -135,31 +143,35 @@ def main():
         ]
     }
     
-    # 1. Generate the initial explanation (Requirement 1-4)
-    # We pass 'beginner' to test the configurable tone bonus
+    # 1. Generate the initial explanation via Gemini
     explanation = generate_portfolio_explanation(sample_portfolio, tone="beginner")
     
     if not explanation:
         return
 
-    # Print the EXTRACTED structured output as required
     print("\n" + "="*50)
     print("EXTRACTED STRUCTURED OUTPUT:")
     print("="*50)
     for key, value in explanation.items():
         print(f"[{key.upper()}]\n{value}\n")
         
-    # 2. Run the Critique (Bonus)
+    # 2. Run the Critique via OpenAI
     critique = critique_explanation(explanation, sample_portfolio)
     print("="*50)
-    print("SENIOR OFFICER CRITIQUE (Bonus):")
+    print("SENIOR OFFICER CRITIQUE (OpenAI):")
     print("="*50)
     print(critique)
     print("\n")
 
 if __name__ == "__main__":
-    # Safety check for API key
+    # Safety checks for API keys
+    missing_keys = []
     if not os.environ.get("GEMINI_API_KEY"):
-        print("[ERROR] GEMINI_API_KEY not found in environment variables. Please set it in your .env file.")
+        missing_keys.append("GEMINI_API_KEY")
+    if not os.environ.get("OPENROUTER_API_KEY"):
+        missing_keys.append("OPENROUTER_API_KEY")
+        
+    if missing_keys:
+        print(f"[ERROR] Missing environment variables: {', '.join(missing_keys)}. Please set them in your .env file.")
     else:
         main()

@@ -5,7 +5,6 @@ import logging
 from dataclasses import dataclass
 from typing import Optional
 
-# Configure logging for graceful error handling
 logging.basicConfig(
     level=logging.ERROR,
     format="[ERROR] %(message)s"
@@ -40,7 +39,6 @@ def fetch_market_price_yfinance(ticker: str, display_name: str, currency: str) -
     """Fetches market data (stocks/indices) using the yfinance library."""
     try:
         asset = yf.Ticker(ticker)
-        # Fetch the last 1 day of historical data to get the current/last closing price
         todays_data = asset.history(period="1d")
         
         if not todays_data.empty:
@@ -78,30 +76,24 @@ def render_terminal_table(assets: list[AssetInfo]):
 def main():
     print("Fetching live market data. Please wait...")
     
-    # 1. Fetch Crypto (Bitcoin via CoinGecko)
     btc_data = fetch_crypto_price_coingecko(
         coin_id="bitcoin", 
         display_name="BTC", 
         currency="usd"
     )
     
-    # 2. Fetch Index (NIFTY 50 via Yahoo Finance)
-    # The ticker for NIFTY 50 on Yahoo Finance is ^NSEI
     nifty_data = fetch_market_price_yfinance(
         ticker="^NSEI", 
         display_name="NIFTY", 
         currency="INR"
     )
     
-    # 3. Fetch Stock (Reliance Industries via Yahoo Finance)
-    # Replacing Gold with a stock to guarantee reliable INR pricing without complex conversions
     reliance_data = fetch_market_price_yfinance(
         ticker="RELIANCE.NS", 
         display_name="RELIANCE", 
         currency="INR"
     )
     
-    # Combine results and render
     portfolio_data = [btc_data, nifty_data, reliance_data]
     render_terminal_table(portfolio_data)
 
