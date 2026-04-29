@@ -16,11 +16,11 @@ This project requires **Python 3.10+**.
 1. Clone the repository.
 2. Create a virtual environment:
    ```bash
-   python -m venv .lvenv
+   python -m venv .venv
    ```
 3. Activate the environment:
    ```bash
-   source .lvenv/bin/activate
+   source .venv/bin/activate
    ```
 4. Install dependencies:
    ```bash
