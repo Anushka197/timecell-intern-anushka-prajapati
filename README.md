@@ -1,11 +1,11 @@
-# imecell-intern-anushka-prajapati
+# timecell-intern-anushka-prajapati
 
 A collection of wealth management tools that help investors calculate portfolio risks during market crashes, track live asset prices, and receive AI-generated financial advice in simple, everyday language.
 
 ## Submission Links
 
 - **Loom Video Walkthrough:** [Link to the Loom/video here]
-- **GitHub Repository:** https://github.com/your-username/timecell-intern-anushka-prajapati
+- **GitHub Repository:** https://github.com/Anushka197/timecell-intern-anushka-prajapati
 
 ---
 
@@ -98,4 +98,4 @@ The most challenging aspect was ensuring the AI-generated explanation remained c
 
 ## AI Usage
 
-AI coding tools (Claude/Copilot) were used to assist with boilerplate code generation and to help refine the terminal table formatting. All logic was manually reviewed and adjusted to ensure mathematical correctness and proper error handling.
+AI coding tools (Gemini Pro/Claude) were used to assist with boilerplate code generation and to help refine the terminal table formatting. All logic was manually reviewed and adjusted to ensure mathematical correctness and proper error handling.
