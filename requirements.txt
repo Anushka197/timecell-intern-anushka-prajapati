@@ -1,0 +1,8 @@
+google-auth==2.49.2
+google-genai==1.73.1
+yfinance==1.3.0
+requests==2.33.1
+python-dotenv==1.2.2
+pydantic==2.13.3
+rich==15.0.0
+tenacity==9.1.4
