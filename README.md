@@ -88,8 +88,6 @@ Uses a Large Language Model (LLM) to provide a plain-English risk assessment of 
 
 ---
 
----
-
 ## Task 4: RAG-Powered Portfolio Intelligence Engine
 
 A Retrieval-Augmented Generation (RAG) system that lets users query Apple Inc.'s 10-K annual filings (FY2020–FY2025) through natural language, powered by a ReAct agent with source citations and a critic review layer.
