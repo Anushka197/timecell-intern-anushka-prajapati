@@ -490,7 +490,15 @@ def main() -> None:
     if not st.session_state["engine_ready"]:
         with st.spinner("🔄 Initialising Portfolio Intelligence Engine…"):
             try:
-                ingestor, agent, debug_handler = initialise_engine()
+                try:
+                    ingestor, agent, debug_handler = initialise_engine()
+                except AttributeError as e:
+                    st.error("🏗️ **Engine Setup Error**: There is a version mismatch with the Agent tools.")
+                    st.info("Try running: `pip install --upgrade llama-index-core llama-index-agent-openai`")
+                    st.stop() # This prevents the rest of the app from running and showing more errors
+                except Exception as e:
+                    st.error(f"⚠️ **Unexpected Error**: {e}")
+                    st.stop()
                 st.session_state["ingestor"] = ingestor
                 st.session_state["agent"] = agent
                 st.session_state["debug_handler"] = debug_handler

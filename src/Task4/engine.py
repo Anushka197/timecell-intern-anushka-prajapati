@@ -231,8 +231,8 @@ def build_agent(index: VectorStoreIndex) -> ReActAgent:
     agent = ReActAgent.from_tools(
         tools=tools,
         llm=llm,
-        verbose=True,
-        max_iterations=15,
+        verbose=False,
+        max_iterations=30,
         system_prompt=system_prompt,
         callback_manager=callback_manager,
     )
