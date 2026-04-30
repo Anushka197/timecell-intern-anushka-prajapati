@@ -1,4 +1,4 @@
-# timecell-intern-anushka-prajapati
+# Timecell Assessment
 
 A collection of wealth management tools that help investors calculate portfolio risks during market crashes, track live asset prices, and receive AI-generated financial advice in simple, everyday language.
 
@@ -85,6 +85,85 @@ Uses a Large Language Model (LLM) to provide a plain-English risk assessment of 
 
 - **Configurable Tone** — The prompt dynamically adjusts its instructions based on whether the user is a `beginner`, `experienced`, or `expert` investor.
 - **Senior Critique** — A second LLM call acts as a "Senior Risk Officer" to critique the initial advisor's response for accuracy.
+
+---
+
+---
+
+## Task 4: RAG-Powered Portfolio Intelligence Engine
+
+A Retrieval-Augmented Generation (RAG) system that lets users query Apple Inc.'s 10-K annual filings (FY2020–FY2025) through natural language, powered by a ReAct agent with source citations and a critic review layer.
+
+### Approach
+
+The system is built as a two-stage pipeline:
+
+1. **Parse** — PDFs are converted to structured Markdown using LlamaParse, with fiscal year metadata injected per document section.
+2. **Ingest** — Parsed documents are chunked and embedded into a local ChromaDB vector store using OpenAI's `text-embedding-ada-002` model.
+
+At query time, a **ReAct agent** (via LlamaIndex) reasons step-by-step, calling two tools:
+- `AppleFilingsSearch` — semantic vector search over the indexed 10-K chunks.
+- `Calculator` — sandboxed Python `eval` for precise arithmetic (percentage changes, CAGRs, margins).
+
+A **Critic-in-the-Loop** layer runs a second LLM call after every response, acting as a Chief Investment Officer who scores the draft for missing context, hidden assumptions, and mathematical traceability.
+
+### Tech Stack
+
+| Component | Choice |
+|---|---|
+| **LLM** | GPT-4o-mini via OpenRouter |
+| **Embeddings** | text-embedding-ada-002 via OpenRouter |
+| **Vector DB** | ChromaDB (local persistent store) |
+| **PDF Parser** | LlamaParse (Markdown output) |
+| **Agent Framework** | LlamaIndex ReActAgent |
+| **UI** | Streamlit |
+
+### Features
+
+- **Streamlit dashboard** (`app.py`) with a dark-themed chat interface, sidebar showing index status for all 6 filings, and collapsible agent reasoning steps.
+- **CLI interface** (`cli.py`) for terminal-based querying with the same Critic-in-the-Loop workflow.
+- **Source citations** — every answer surfaces the fiscal year, page number, and a text preview of the retrieved chunks.
+- **Deterministic math** — the system prompt strictly forbids the LLM from doing mental arithmetic; all calculations must go through the Calculator tool.
+- **V2 ingestion pipeline** (`parse_v2.py` / `ingest_v2.py`) with table-aware chunking using `MarkdownElementNodeParser`, keeping financial tables fully intact rather than splitting them mid-row.
+
+### Running Task 4
+
+**Step 1 — Parse the PDFs** (requires a LlamaCloud API key):
+```bash
+cd src/Task4
+python parse.py
+```
+
+**Step 2 — Ingest into ChromaDB** (only needed once; skipped automatically if the index already exists):
+```bash
+python ingest.py
+```
+
+**Step 3a — Launch the Streamlit UI:**
+```bash
+streamlit run app.py
+```
+
+**Step 3b — Or use the CLI:**
+```bash
+python cli.py
+```
+
+### Required API Keys (`.env` in `src/Task4/`)
+
+```env
+OPENROUTER_API_KEY=your_key_here
+OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+LLAMA_CLOUD_API_KEY=your_key_here
+```
+
+### Design Decisions
+
+**Why OpenRouter instead of direct OpenAI?** OpenRouter provides a unified API gateway, making it easy to swap models (e.g., GPT-4o → Claude) without changing code.
+
+**Why a local ChromaDB?** Keeps the vector store self-contained with no external service dependency. The persisted index means embeddings are only computed once.
+
+**Why a Critic layer?** Financial analysis is high-stakes. A second LLM pass that explicitly hunts for missing context and assigns a conviction score adds a useful sanity check before the answer reaches the user.
 
 ---
 
