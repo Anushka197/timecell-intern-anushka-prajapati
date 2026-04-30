@@ -9,7 +9,9 @@ import logging
 import warnings
 import os
 
-from ingest import PortfolioIngestor
+# from ingest import PortfolioIngestor
+from ingest_v2 import PortfolioIngestorV2
+
 # Import the new critic function
 from engine import build_agent, query_with_critic
 
@@ -29,7 +31,8 @@ def main():
     print("Loading vector database and initializing agent... Please wait.\n")
 
     try:
-        ingestor = PortfolioIngestor()
+        # ingestor = PortfolioIngestor()
+        ingestor = PortfolioIngestorV2()
         index = ingestor.load_index()
         agent, _ = build_agent(index)
 
