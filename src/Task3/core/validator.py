@@ -6,7 +6,7 @@ import json
 logger = logging.getLogger(__name__)
 
 def check_api_keys() -> bool:
-    missing_keys = [k for k in ["GEMINI_API_KEY", "OPENROUTER_API_KEY"] if not os.environ.get(k)]
+    missing_keys = [k for k in ["OPENROUTER_API_KEY", "GEMINI_API_KEY"] if not os.environ.get(k)]
     if missing_keys:
         logger.error(f"Missing environment variables: {', '.join(missing_keys)}")
         return False

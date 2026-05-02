@@ -3,23 +3,23 @@ import logging
 import argparse
 from dotenv import load_dotenv
 
-# 1. CONFIGURE LOGGING (Do this before anything else)
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     handlers=[
         logging.FileHandler("app.log"), # Saves logs to a file
-        logging.StreamHandler()         # Also prints to your terminal
+        logging.StreamHandler()         # Also prints to the terminal
     ]
 )
-logger = logging.getLogger(__name__)
-
-# Load .env file variables before importing models that require keys
-load_dotenv()
 
 from core.validator import check_api_keys, load_and_validate_portfolio
 from llm.main_model import generate_portfolio_explanation
 from llm.critic_model import critique_explanation
+
+logger = logging.getLogger(__name__)
+
+# Load .env file variables before importing models that require keys
+load_dotenv()
 
 def main():
     # 1. Check API Keys

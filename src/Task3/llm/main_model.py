@@ -9,11 +9,16 @@ from google.genai import types
 from google.genai import errors
 from core.prompt_builder import build_advisor_prompt
 from core.parser import parse_llm_json
+import os
+from dotenv import load_dotenv
+from google import genai
+
+load_dotenv()
 
 # Client initializes automatically using the GEMINI_API_KEY env variable
 gemini_client = genai.Client()
 
-def generate_portfolio_explanation(portfolio: Dict[str, Any], tone: str = "beginner") -> Dict[str, Any]:
+def generate_portfolio_explanation(portfolio: Dict[str, Any], tone: str = "expert") -> Dict[str, Any]:
     """Calls the Gemini API to generate the initial explanation and parses the JSON."""
     
     prompt = build_advisor_prompt(portfolio, tone)

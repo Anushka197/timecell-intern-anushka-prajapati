@@ -2,8 +2,6 @@
 
 from typing import Dict, Any
 
-# config.py
-
 SAFE_RUNWAY_MONTHS = 12
 CONCENTRATION_LIMIT = 40
 
