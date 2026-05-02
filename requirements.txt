@@ -28,6 +28,7 @@ pypdf
 python-dotenv
 requests
 streamlit
+tabulate
 uvicorn
 uvloop
 yarl
