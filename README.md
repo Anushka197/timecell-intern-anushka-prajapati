@@ -286,7 +286,7 @@ CLI and dashboard both return:
 - Source citations with fiscal year, page number, and relevance score
 - Critic's scrutiny with conviction percentage
 
-![Task 4 Dashboard](assets/task4_dashboard.png)
+![Task 4 Dashboard](src/Task4/dashboard.png)
 
 ---
 
@@ -309,7 +309,7 @@ LlamaIndex, ChromaDB, and Pydantic have overlapping version constraints that bre
 ## Requirements Coverage
 
 | Requirement | Task | How Satisfied |
-|---|---|---|
+|---|----|---|
 | `compute_risk_metrics()` with all 5 metrics | Task 1 | `risk.py` — fully implemented with moderate scenario bonus |
 | Portfolio validation | Task 1 | `allocations.py` — validates sum, negative allocations, structure |
 | CLI bar chart | Task 1 | `display.py` — terminal block characters, no external libraries |
@@ -325,12 +325,20 @@ LlamaIndex, ChromaDB, and Pydantic have overlapping version constraints that bre
 
 ## Learnings
 
-**Prompt engineering is architecture.** The structure of a prompt — how data is delimited, how output is constrained — determines reliability more than model choice.
+Running LLMs locally demands too much memory. A 7B model with embeddings and a vector store quickly exceeds laptop capacity. API-based inference is more practical, and every call costs something, so you write better prompts out of necessity.
 
-**Separation of concerns scales.** Splitting `risk.py`, `allocations.py`, and `display.py` made Task 1 testable in isolation. The same principle applied to Task 4's parse → ingest → query pipeline.
+RAG quality depends entirely on chunking strategy. Naive text splitting breaks financial tables mid-row, making retrieved context useless. A two-pass approach — Markdown structure first, then sentence splitting — preserves tables and significantly improves accuracy, which would be my next task to complete.
 
-**OpenRouter simplifies multi-model workflows.** A single API key and endpoint to access GPT-4o, GPT-4o-mini, and others eliminated provider-specific SDK overhead and made the critic-advisor pattern easy to implement.
+Finance math must be exact. Formulas like crash survival, runway, and drawdown are straightforward, but the logic governing severe vs. moderate scenarios and ruin test thresholds requires careful thinking. LLMs will fabricate numbers if given the chance. The fix is architectural: force a sandboxed calculator for every computation rather than hoping the model gets it right.
 
-**RAG quality depends on chunking strategy.** A two-pass chunking approach — Markdown structure first, sentence splitting second — preserved table integrity that a naive token splitter would have fragmented.
+Prompt structure matters more than prompt content. XML-delimited prompts with inline JSON schemas cut parsing failures to near zero because the model knows exactly what to return. 
 
-**Hallucination is a design problem, not a prompt problem.** You cannot reliably instruct an LLM not to hallucinate numbers. You can architect a system where it physically cannot bypass the correct computation path.
+---
+
+## Future Work
+
+Implement a query table pipeline to extract and index financial tables separately. Embedding-based retrieval struggles with complex tables containing cross-references and multi-row calculations. Dedicated table detection during ingestion would enable precise retrieval for numerical comparisons and multi-period trends.
+
+As the dataset grows, scalability becomes critical. Move to a distributed vector database with caching for frequently accessed chunks. Batch API calls and cache responses to reduce costs while maintaining accuracy.
+
+We can also consider a domain-specific knowledge graph of financial metrics, their dependencies, and valid value ranges. This would validate retrieved context before calculations and catch inconsistencies that raw embeddings won't detect.
