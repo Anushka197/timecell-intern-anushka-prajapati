@@ -6,7 +6,7 @@ from openai import OpenAI
 def get_openai_client():
     """Initializes the client using the environment variable."""
     return OpenAI(
-      base_url="[https://openrouter.ai/api/v1](https://openrouter.ai/api/v1)",
+      base_url=os.environ.get("OPENROUTER_BASE_URL"),
       api_key=os.environ.get("OPENROUTER_API_KEY"),
     )
 

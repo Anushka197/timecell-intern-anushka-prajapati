@@ -1,8 +1,10 @@
 # display.py
 
 from typing import Dict, Any, List
-from utils import format_inr
 from risk import compute_risk_metrics
+
+def format_inr(value: float) -> str:
+    return f"₹{value:,.2f}"
 
 def generate_cli_bar_chart(assets: List[Dict[str, Any]]) -> str:
     lines = ["\n--- Portfolio Allocation ---"]
