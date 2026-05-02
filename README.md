@@ -2,11 +2,6 @@
 
 A collection of wealth management tools that help investors calculate portfolio risks during market crashes, track live asset prices, and receive AI-generated financial advice in simple, everyday language.
 
-## Submission Links
-
-- **Loom Video Walkthrough:** https://drive.google.com/file/d/1LMQS848fJVQZXUtPxLpJn-ucba-tP9VJ/view?usp=drive_link
-- **GitHub Repository:** https://github.com/Anushka197/timecell-intern-anushka-prajapati
-
 ---
 
 ## Tech Stack (Global)
