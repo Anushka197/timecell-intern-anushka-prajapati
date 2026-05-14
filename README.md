@@ -303,8 +303,8 @@ LlamaIndex, ChromaDB, and Pydantic have overlapping version constraints that bre
 
 ## Requirements Coverage
 
-| Requirement | Task | How Satisfied |
-|---|----|---|
+| Requirement |  Task  | How Satisfied |
+|---|-----|---|
 | `compute_risk_metrics()` with all 5 metrics | Task 1 | `risk.py` — fully implemented with moderate scenario bonus |
 | Portfolio validation | Task 1 | `allocations.py` — validates sum, negative allocations, structure |
 | CLI bar chart | Task 1 | `display.py` — terminal block characters, no external libraries |
@@ -320,7 +320,7 @@ LlamaIndex, ChromaDB, and Pydantic have overlapping version constraints that bre
 
 ## Learnings
 
-Running LLMs locally demands too much memory. A 7B model with embeddings and a vector store quickly exceeds laptop capacity. API-based inference is more practical, and every call costs something, so you write better prompts out of necessity.
+Running LLMs locally demands too much memory. A 7B model with embeddings and a vector store quickly exceeds laptop capacity. API-based inference is more practical, and every call costs something, so I learnt to  write better prompts out of necessity.
 
 RAG quality depends entirely on chunking strategy. Naive text splitting breaks financial tables mid-row, making retrieved context useless. A two-pass approach — Markdown structure first, then sentence splitting — preserves tables and significantly improves accuracy, which would be my next task to complete.
 
