@@ -169,7 +169,7 @@ def initialise_engine():
 def render_sidebar(ingestor) -> None:
     with st.sidebar:
         st.markdown("## 📁 Document Index Status")
-        st.markdown("---")
+        # st.markdown("---")
 
         if ingestor is None:
             st.warning("Engine not initialised yet.")
@@ -185,32 +185,32 @@ def render_sidebar(ingestor) -> None:
         with col2:
             st.metric("Coverage", f"{int(indexed_count/6*100)}%")
 
-        st.markdown("---")
-        st.markdown("**Apple Inc. 10-K Filings**")
+        # st.markdown("---")
+        # st.markdown("**Apple Inc. 10-K Filings**")
 
-        for filing in filing_statuses:
-            status_icon = "🟢" if filing["indexed"] else "🔴"
-            status_text = "Indexed" if filing["indexed"] else "Pending"
-            st.markdown(
-                f"{status_icon} **FY{filing['year']}** — "
-                f"<span class='{'status-indexed' if filing['indexed'] else 'status-pending'}'>"
-                f"{status_text}</span>",
-                unsafe_allow_html=True,
-            )
+        # for filing in filing_statuses:
+        #     status_icon = "🟢" if filing["indexed"] else "🔴"
+        #     status_text = "Indexed" if filing["indexed"] else "Pending"
+        #     st.markdown(
+        #         f"{status_icon} **FY{filing['year']}** — "
+        #         f"<span class='{'status-indexed' if filing['indexed'] else 'status-pending'}'>"
+        #         f"{status_text}</span>",
+        #         unsafe_allow_html=True,
+        #     )
 
-        st.markdown("---")
-        st.markdown("## ⚙️ System Info")
-        st.markdown(
-            """
-            - **LLM**: GPT-4o via OpenRouter
-            - **Embeddings**: text-embedding-ada-002
-            - **Vector DB**: ChromaDB (local)
-            - **Parser**: LlamaParse (Markdown)
-            - **Agent**: ReAct (Reasoning + Acting)
-            """
-        )
+        # st.markdown("---")
+        # st.markdown("## ⚙️ System Info")
+        # st.markdown(
+        #     """
+        #     - **LLM**: GPT-4o via OpenRouter
+        #     - **Embeddings**: text-embedding-ada-002
+        #     - **Vector DB**: ChromaDB (local)
+        #     - **Parser**: LlamaParse (Markdown)
+        #     - **Agent**: ReAct (Reasoning + Acting)
+        #     """
+        # )
 
-        st.markdown("---")
+        # st.markdown("---")
         st.markdown("## 💡 Sample Questions")
         sample_questions = [
             "What was Apple's total revenue in FY2024?",
@@ -218,7 +218,7 @@ def render_sidebar(ingestor) -> None:
             "What are Apple's main risk factors in the 2023 10-K?",
             "Show the trend in gross margin from 2020 to 2024.",
             "How did iPhone revenue change between FY2022 and FY2023?",
-            "What was Apple's net income CAGR from 2020 to 2024?",
+            # "What was Apple's net income CAGR from 2020 to 2024?",
         ]
         for q in sample_questions:
             if st.button(q, key=f"sample_{q[:20]}", use_container_width=True):
@@ -525,7 +525,7 @@ def main() -> None:
     # ── Status Banner ────────────────────────────────────────────────────────
     if st.session_state["engine_ready"]:
         st.success(
-            "✅ Engine ready — 6 Apple 10-K filings indexed and searchable.",
+            "Engine ready — 6 Apple 10-K filings indexed and searchable.",
             icon="✅",
         )
 

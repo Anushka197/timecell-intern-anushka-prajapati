@@ -30,6 +30,5 @@ requests
 streamlit
 tabulate
 uvicorn
-uvloop
 yarl
 yfinance

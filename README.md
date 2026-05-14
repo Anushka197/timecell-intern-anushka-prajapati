@@ -318,6 +318,17 @@ LlamaIndex, ChromaDB, and Pydantic have overlapping version constraints that bre
 
 ---
 
+## AI Usage & Attribution
+
+This project was built with AI assistance, aligned with Timecell’s focus on AI-assisted engineering.
+
+- **Kiro** (similar to Claude Code, with access to Claude and other models through free token usage) was used heavily for Task 4 to structure the RAG pipeline, manage dependencies, and coordinate multi-file workflows.
+- **Gemini 3 Pro** was the primary coding assistant for Tasks 1–3, helping with the coding implementation, refactoring, and debugging.
+- **Claude** was used to generate the README markdown and improve parts of the interface.
+- **ChatGPT** and **Gemini Thinking** were mainly used for documentation, concept clarification, and understanding topics like financial risk metrics and agentic RAG design.
+
+---
+
 ## Learnings
 
 Running LLMs locally demands too much memory. A 7B model with embeddings and a vector store quickly exceeds laptop capacity. API-based inference is more practical, and every call costs something, so I learnt to  write better prompts out of necessity.
