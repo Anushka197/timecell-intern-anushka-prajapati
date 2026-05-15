@@ -281,7 +281,7 @@ CLI and dashboard both return:
 - Source citations with fiscal year, page number, and relevance score
 - Critic's scrutiny with conviction percentage
 
-![Task 4 Dashboard](src/Task4/dashboard.png)
+![Task 4 Dashboard](Task4/dashboard.png)
 
 ---
 
