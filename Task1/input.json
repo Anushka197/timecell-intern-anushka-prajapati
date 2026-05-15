@@ -1,30 +1,30 @@
-portfolios = [
+[
     {
         "name": "Main Portfolio",
-        "total_value_inr": 10_000_000, 
-        "monthly_expenses_inr": 80_000,
+        "total_value_inr": 10000000, 
+        "monthly_expenses_inr": 80000,
         "assets": [
             {"name": "BTC", "allocation_pct": 30, "expected_crash_pct": -80},
-            {"name": "NIFTY50","allocation_pct": 40, "expected_crash_pct": -40},
+            {"name": "NIFTY50", "allocation_pct": 40, "expected_crash_pct": -40},
             {"name": "GOLD", "allocation_pct": 20, "expected_crash_pct": -15},
-            {"name": "CASH", "allocation_pct": 10, "expected_crash_pct": 0},
+            {"name": "CASH", "allocation_pct": 10, "expected_crash_pct": 0}
         ]
     },
     {
         "name": "Invalid Portfolio - Negative Value",
-        "total_value_inr": -50_000,
-        "monthly_expenses_inr": 10_000,
+        "total_value_inr": -50000,
+        "monthly_expenses_inr": 10000,
         "assets": [
             {"name": "BTC", "allocation_pct": 30, "expected_crash_pct": -80},
-            {"name": "NIFTY50","allocation_pct": -40, "expected_crash_pct": -40},
+            {"name": "NIFTY50", "allocation_pct": -40, "expected_crash_pct": -40},
             {"name": "GOLD", "allocation_pct": 20, "expected_crash_pct": -15},
-            {"name": "CASH", "allocation_pct": 10, "expected_crash_pct": 0},
+            {"name": "CASH", "allocation_pct": 10, "expected_crash_pct": 0}
         ]
     },
     {
         "name": "Invalid Portfolio - No Assets",
-        "total_value_inr": 5_000_000,
-        "monthly_expenses_inr": 50_000,
+        "total_value_inr": 5000000,
+        "monthly_expenses_inr": 50000,
         "assets": []
     }
 ]

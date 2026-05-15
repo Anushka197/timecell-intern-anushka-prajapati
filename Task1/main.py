@@ -3,27 +3,24 @@
 from typing import Dict, Any, List
 from allocations import is_valid_portfolio_structure
 from display import display_risk_report
+import json
 
-def get_portfolios_from_file(filepath: str = "input.txt") -> List[Dict[str, Any]]:
+def get_portfolios_from_file(filepath: str = "input.json") -> List[Dict[str, Any]]:
     print(f"\n--- Loading Portfolios from {filepath} ---")
     
     try:
         with open(filepath, 'r') as f:
-            content = f.read()
+            return json.load(f)
             
-        local_scope = {}
-        exec(content, {}, local_scope)
-        return local_scope.get("portfolios", [])
-        
     except FileNotFoundError:
         print(f"Error: '{filepath}' not found.")
         return []
-    except Exception as e:
-        print(f"Error parsing '{filepath}': {e}")
+    except json.JSONDecodeError:
+        print(f"Error: '{filepath}' contains invalid JSON.")
         return []
 
 if __name__ == "__main__":
-    raw_portfolios = get_portfolios_from_file("input.txt")
+    raw_portfolios = get_portfolios_from_file("input.json")
     
     if not raw_portfolios:
         print("Warning: No 'portfolios' list found in file.")
